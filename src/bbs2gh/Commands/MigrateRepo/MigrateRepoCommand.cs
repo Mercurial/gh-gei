@@ -22,6 +22,7 @@ public class MigrateRepoCommand : CommandBase<MigrateRepoCommandArgs, MigrateRep
         AddOption(GithubRepo);
         AddOption(GithubPat);
         AddOption(GithubApiUrl);
+        AddOption(GithubGQLUrl);
         AddOption(BbsServerUrl);
         AddOption(BbsProject);
         AddOption(BbsRepo);
@@ -124,6 +125,8 @@ public class MigrateRepoCommand : CommandBase<MigrateRepoCommandArgs, MigrateRep
 
     public Option<string> GithubApiUrl { get; } = new("--github-api-url");
 
+    public Option<string> GithubGQLUrl { get; } = new("--github-graphql-url");
+
     public Option<string> ArchiveDownloadHost { get; } = new(
         name: "--archive-download-host",
         description: "The host to use to connect to the Bitbucket Server/Data Center instance via SSH or SMB. Defaults to the host from the Bitbucket Server URL (--bbs-server-url).");
@@ -215,7 +218,7 @@ public class MigrateRepoCommand : CommandBase<MigrateRepoCommandArgs, MigrateRep
         if (args.GithubOrg.HasValue())
         {
             var githubApiFactory = sp.GetRequiredService<GithubApiFactory>();
-            githubApi = githubApiFactory.Create(args.GithubApiUrl.HasValue() ? args.GithubApiUrl : null, args.GithubPat);
+            githubApi = githubApiFactory.Create(args.GithubApiUrl.HasValue() ? args.GithubApiUrl : null, args.GithubPat, args.GithubGQLUrl);
         }
 
         if (args.BbsServerUrl.HasValue())

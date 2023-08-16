@@ -41,11 +41,11 @@ public sealed class GithubApiFactory : ISourceGithubApiFactory, ITargetGithubApi
         return new GithubApi(githubClient, apiUrl, _retryPolicy);
     }
 
-    GithubApi ITargetGithubApiFactory.Create(string apiUrl, string targetPersonalAccessToken)
+    GithubApi ITargetGithubApiFactory.Create(string apiUrl, string targetPersonalAccessToken, string gqlUrl)
     {
         apiUrl ??= DEFAULT_API_URL;
         targetPersonalAccessToken ??= _environmentVariableProvider.TargetGithubPersonalAccessToken();
         var githubClient = new GithubClient(_octoLogger, _clientFactory.CreateClient("Default"), _versionProvider, _retryPolicy, _dateTimeProvider, targetPersonalAccessToken);
-        return new GithubApi(githubClient, apiUrl, _retryPolicy);
+        return string.IsNullOrEmpty(gqlUrl) ? new GithubApi(githubClient, apiUrl, _retryPolicy) : new GithubApi(githubClient, apiUrl, gqlUrl, _retryPolicy);
     }
 }
