@@ -28,7 +28,6 @@ public class GithubApiFactory : ITargetGithubApiFactory
 
     public virtual GithubApi Create(string apiUrl = null, string targetPersonalAccessToken = null, string gqlUrl = null)
     {
-        Console.WriteLine(gqlUrl);
         apiUrl ??= DEFAULT_API_URL;
         targetPersonalAccessToken ??= _environmentVariableProvider.TargetGithubPersonalAccessToken();
         var githubClient = new GithubClient(_octoLogger, _client, _versionProvider, _retryPolicy, _dateTimeProvider, targetPersonalAccessToken);
